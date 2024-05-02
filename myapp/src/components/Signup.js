@@ -30,7 +30,8 @@ export default function Signup() {
         });
         result = await result.json();
         console.log(result);
-        localStorage.setItem("user",JSON.stringify(result));
+        localStorage.setItem("user",JSON.stringify(result.result));
+        localStorage.setItem("auth",JSON.stringify(result.auth));
         navigate('/')
     }
 

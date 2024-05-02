@@ -24,8 +24,13 @@ export default function Login() {
     });
     result = await result.json();
     console.log(result);
-    localStorage.setItem("user", JSON.stringify(result));
-    navigate("/");
+    if (result.auth){
+      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("auth", JSON.stringify(result.auth));
+      navigate("/");
+    }else{
+      alert("Please enter correct details")
+    }
   };
   return (
     <div>

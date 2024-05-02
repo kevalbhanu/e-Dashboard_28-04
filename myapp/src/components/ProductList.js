@@ -7,13 +7,20 @@ export default function ProductList() {
     getProducts();
   }, []);
   const getProducts = async () => {
-    let result = await fetch("http://localhost:5000/products");
+    let result = await fetch("http://localhost:5000/products",{
+      headers:{
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth'))}`
+      }
+    });
     result = await result.json();
     setProducts(result);
   };
   const deleteProduct = async (id) => {
     let result = await fetch(`http://localhost:5000/product/${id}`, {
       method: "delete",
+      headers:{
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth'))}`
+      }
     });
     result = await result.json();
     console.log(result);
@@ -25,7 +32,11 @@ export default function ProductList() {
   const searchHandle = async (event) => {
     let key = event.target.value;
     if (key) {
-      let result = await fetch(`http://localhost:5000/search/${key}`);
+      let result = await fetch(`http://localhost:5000/search/${key}`,{
+        headers:{
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth'))}`
+        }
+      });
       result = await result.json();
       if (result) {
         setProducts(result);

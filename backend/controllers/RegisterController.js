@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const jwtKey = 'e-comm';
 
 
 const register = async (req, res) => {
@@ -13,6 +15,7 @@ const register = async (req, res) => {
         data: 'email already exist',
       });
     }
+    //Hashing Password
     const hashpass=async (plainpass)=>{
       const saltround=10;
       const hash =await bcrypt.hashSync(plainpass, saltround);
@@ -23,10 +26,19 @@ const register = async (req, res) => {
     user.password = await hashpass(user.password);
     console.log(user)
     let result = await user.save();
-    return res.status(200).json({
-      status: true,
-      data: req.body,
-    });
+    jwt.sign({result},jwtKey,{expiresIn:"1h"},(err,token)=>{
+      if(!err){
+        res.status(200).json({
+          result,
+          auth:token
+        })
+      }else{
+        res.status(400).json({
+          message:err
+        })
+      }
+
+    })
   } catch (error) {
     return res.status(422).json({
         status: false,

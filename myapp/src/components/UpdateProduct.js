@@ -17,7 +17,11 @@ export default function UpdateProduct() {
 
     const getProductDetails=async ()=>{
       console.log(params);
-      let result = await fetch(`http://localhost:5000/product/${params.id}`);
+      let result = await fetch(`http://localhost:5000/product/${params.id}`,{
+        headers:{
+          Authorization:`Bearer ${JSON.parse(localStorage.getItem('auth'))}`
+        }
+      });
       result = await result.json();
       setName(result.name);
       setPrice(result.price);
@@ -30,7 +34,8 @@ export default function UpdateProduct() {
           method:"put",
           body:JSON.stringify({name,price,category}),
           headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth'))}`
           }
         });
         result = await result.json();
